@@ -14,7 +14,7 @@ const Header = ({ onSearchClick }) =>  {
         "南部地區":["嘉義縣", "嘉義市", "臺南市", "高雄市", "屏東縣"],
         "東部地區":["花蓮縣", "臺東縣"],
         "離島地區":["澎湖縣", "金門縣", "連江縣"]}
-
+    // const [selectedCitiesCount, setSelectedCitiesCount] = React.useState(0);
     const cityArray = Object.values(cityList).flat();
 
     const [checked, setChecked] = React.useState({
@@ -26,7 +26,21 @@ const Header = ({ onSearchClick }) =>  {
             ].map((item) => [item, true])
         ),
     });
- 
+
+    React.useEffect(() => {
+
+        const countCheckbox = () => {
+            const selectedCities = Object.entries(checked.cityChecklist)
+                .filter(([city, isSelected]) => isSelected && city !== 'allCities' && !cityList.hasOwnProperty(city))
+                .map(([city]) => city);
+
+            console.log("selectedCities", selectedCities)
+            setCityNum(selectedCities.length)
+        };
+
+        countCheckbox();
+    }, [checked, cityList]); 
+
     const handleChange1 = (event) => {
         setChecked({
             allCities: event.target.checked,
@@ -70,7 +84,8 @@ const Header = ({ onSearchClick }) =>  {
         }));
 
     };
-
+    
+  
     //// Date ////
     const [SliderValue, setSliderValue] = React.useState([100000, 1000000]);
     const [Date1value, setDate1value] = React.useState(new Date('2022-09-01'));
@@ -94,14 +109,13 @@ const Header = ({ onSearchClick }) =>  {
     //   ];
 
     //// Search ////
-    const [ShowSliderValue, setShowSliderValue] = React.useState([100000, 1000000]);
     const [CityNum, setCityNum] = React.useState(22);
-    const [SelectedDate1, setSelectedDate1] = React.useState(new Date('2022-09-01'));
-    const [SelectedDate2, setSelectedDate2] = React.useState(new Date('2023-09-01'));
+    const [ShowDate1, setShowDate1] = React.useState(formatDate(new Date('2022-09-01')));
+    const [ShowDate2, setShowDate2] = React.useState(formatDate(new Date('2023-09-01')));
 
     const [searchData, setSearchData] = React.useState({
-        selectedDate1: formatDate(SelectedDate1),
-        selectedDate2: formatDate(SelectedDate2),
+        selectedDate1: ShowDate1,
+        selectedDate2: ShowDate2,
         selectedCities: cityArray,
         sliderValue: [100000, 1000000],
     });
@@ -111,49 +125,58 @@ const Header = ({ onSearchClick }) =>  {
     React.useEffect(() => {
         onSearchClick(searchData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); 
-    
-    const handleSearchClick = () => {
+    }, [searchData]); 
 
+    const handleSearchClick = () => {
         // 獲取選定的縣市
         const selectedCities = Object.entries(checked.cityChecklist)
             .filter(([city, isSelected]) => isSelected && city !== 'allCities' && !cityList.hasOwnProperty(city))
             .map(([city]) => city);
 
+        setCityNum(selectedCities.length)
+
         console.log('選定的縣市:', selectedCities);
 
         if (selectedCities.length > 0) {
+            var date1
+            var date2
+            var selectedCity = selectedCities
+            var sliderValue = SliderValue
             setCityNum(selectedCities.length)
 
             // 獲取選定的日期
             if (Date1value > Date2value) {
+                date1 = formatDate(Date2value)
+                date2 = formatDate(Date1value)
                 const tempDate = Date1value;
                 setDate1value(Date2value);
                 setDate2value(tempDate);
+            } else {
+                date1 = formatDate(Date1value)
+                date2 = formatDate(Date2value)
             }
             console.log('選定的日期範圍:', formatDate(Date1value), '至', formatDate(Date2value));
-            setSelectedDate1(Date1value)
-            setSelectedDate2(Date2value)
+            setShowDate1(formatDate(Date1value))
+            setShowDate2(formatDate(Date2value))
     
             // 獲取 Slider 範圍值
             console.log('Slider 範圍值:', SliderValue);
-            setShowSliderValue(SliderValue)
-    
+            // setShowSliderValue(SliderValue)
+
             setSearchData({
-                SelectedDate1,
-                SelectedDate2,
-                selectedCities,
-                ShowSliderValue,
+                selectedDate1: date1,
+                selectedDate2: date2,
+                selectedCities: selectedCity,
+                sliderValue: sliderValue,
             });
-            setIsCityError(false);
             
-            onSearchClick(searchData);
+            setIsCityError(false);
+
         } else {
             setIsCityError(true);
         }
 
     };
-
 
     return (
         <div id="header">
@@ -165,8 +188,8 @@ const Header = ({ onSearchClick }) =>  {
                     aria-controls="panel1a-content"
                     id="panel1a-header">
                     <div className='header-content'>
-                        <span>日期範圍：{formatDate(SelectedDate1)} ~ {formatDate(SelectedDate2)}</span>
-                        <span>月均人數：{ShowSliderValue[0]} ~ {ShowSliderValue[1]}</span>
+                        <span>日期範圍：{formatDate(Date1value)} ~ {formatDate(Date2value)}</span>
+                        <span>月均人數：{SliderValue[0]} ~ {SliderValue[1]}</span>
                         <span>選定縣市數：{CityNum}</span>
                     </div>
                 </AccordionSummary>

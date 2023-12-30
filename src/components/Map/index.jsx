@@ -6,7 +6,7 @@ const Map = (props) => {
     console.log("input: ", selectedDate1, selectedDate2, selectedCities, sliderValue)
     return (
         <div id="map">
-            {/* {SelectedDate1}, {SelectedDate2}, {selectedCities[0]}, {ShowSliderValue[0]} */}
+            {selectedDate1}<br />{selectedDate2}<br />{selectedCities}<br />{sliderValue}
         </div>
     );
 };

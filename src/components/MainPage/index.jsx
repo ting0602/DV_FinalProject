@@ -2,6 +2,7 @@ import './MainPage.css';
 import React from 'react';
 import Header from '../Header';
 import Map from '../Map';
+import ChartPage from '../ChartPage';
 
 const MainPage = () => {
     const [SelectedData, setSelectedData] = React.useState({
@@ -18,6 +19,7 @@ const MainPage = () => {
         <div id="main">
             <Header  onSearchClick={handleSearchClick} />
             <Map data={SelectedData} />
+            <ChartPage />
             {/* <div>Padding</div> */}
             {/* <div>
                 HELLO 嗨嗨

@@ -5,6 +5,7 @@
     width: 100%;
     text-align: center;
     background-color:#adcdd9;
+    z-index: 999;
 
     .header-summary {
         padding: .5rem;
