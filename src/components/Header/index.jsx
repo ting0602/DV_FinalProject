@@ -39,7 +39,8 @@ const Header = ({ onSearchClick }) =>  {
         };
 
         countCheckbox();
-    }, [checked, cityList]); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [checked]); 
 
     const handleChange1 = (event) => {
         setChecked({

@@ -1,9 +1,10 @@
 import './ChartPage.css';
 import React from 'react';
 import { LineChart } from '@mui/x-charts';
-import { Button, Snackbar } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 
 const ChartPage = () => {
     const [open, setOpen] = React.useState(false);
@@ -42,34 +43,49 @@ const ChartPage = () => {
       console.log(xAxisData);
 
       const action = (
-        <React.Fragment>
+        <div className='chart-windows' >
           <IconButton
             size="small"
             aria-label="close"
-            color="inherit"
             onClick={handleClose}
+            className='chart-close-btn'
           >
             <CloseIcon fontSize="small" />
           </IconButton>
           <LineChart
-                  xAxis={[{ scaleType: 'point', data: xAxisData }]}
-                  series={[
-                      { curve: "linear", data: [0, 5, 2, 6, 3, 9.3], label: '11', id: '11' },
-                      { curve: "linear", data: [6, 3, 7, 9.5, 4, 2], label: '22', id: '22' },
-                  ]}
-                  width={500}
-                  height={300}
+            xAxis={[{ scaleType: 'point', data: xAxisData }]}
+            series={[
+              { curve: "linear", data: [0, 5, 2, 6, 3, 9.3], label: '11', id: '11' },
+              { curve: "linear", data: [6, 3, 7, 9.5, 4, 2], label: '22', id: '22' },
+              { curve: "linear", data: [3, 6, 3, 13.5, 8, 3], label: '33', id: '33' },
+            ]}
+            width={500}
+            height={300}
+            className='line-chart'
+            position="top"
           />
-        </React.Fragment>
+        </div>
       );
     return (
         <div id="chart-page">
-            <Button onClick={handleClick}>Open simple snackbar</Button>
+            {!open && <IconButton
+                size="large"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClick}
+                className='chart-btn'
+            >
+                <InsertChartOutlinedIcon  fontSize="large" />
+            </IconButton>}
             <Snackbar
                 open={open}
                 onClose={handleClose}
-                message="Note archived"
                 action={action}
+                className='chart-container'
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
             />
         </div>
     )
