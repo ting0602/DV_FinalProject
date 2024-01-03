@@ -2,6 +2,7 @@ import './MainPage.css';
 import React from 'react';
 import Header from '../Header';
 import Map from '../Map';
+import BubbleMap from '../BubbleMap';
 import ChartPage from '../ChartPage';
 
 const MainPage = () => {
@@ -18,7 +19,7 @@ const MainPage = () => {
     return (
         <div id="main">
             <Header  onSearchClick={handleSearchClick} />
-            <Map data={SelectedData} />
+            <BubbleMap data={SelectedData} />
             <ChartPage />
             {/* <div>Padding</div> */}
             {/* <div>
