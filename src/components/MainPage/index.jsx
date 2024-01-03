@@ -1,7 +1,7 @@
 import './MainPage.css';
 import React from 'react';
 import Header from '../Header';
-import Map from '../Map';
+// import Map from '../Map';
 import BubbleMap from '../BubbleMap';
 import ChartPage from '../ChartPage';
 

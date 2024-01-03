@@ -1,26 +1,26 @@
 import './ChartPage.css';
 import React from 'react';
-import { LineChart, ChartsTooltip } from '@mui/x-charts';
+import { LineChart } from '@mui/x-charts';
 // import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
-import { Snackbar, Tooltip } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 
-const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-        console.log("good tooltip")
-        // Customize your Tooltip content here
-        return (
-        <div className="custom-tooltip">
-            <p>{`Value: ${payload[0].value}`}</p>
-            <p>{`HELLLLLLLO`}</p>
-        </div>
-        );
-    }
+// const CustomTooltip = ({ active, payload }) => {
+//     if (active && payload && payload.length) {
+//         console.log("good tooltip")
+//         // Customize your Tooltip content here
+//         return (
+//         <div className="custom-tooltip">
+//             <p>{`Value: ${payload[0].value}`}</p>
+//             <p>{`HELLLLLLLO`}</p>
+//         </div>
+//         );
+//     }
 
-        return null;
-    };
+//         return null;
+//     };
 
 const ChartPage = () => {
     const [open, setOpen] = React.useState(false);
