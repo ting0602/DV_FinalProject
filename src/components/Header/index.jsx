@@ -103,17 +103,20 @@ const Header = ({ onSearchClick }) =>  {
     const handleChange = (event, newValue) => {
         setSliderValue(newValue);
     };
-    // const marks = [
-    //     {value: 0, label: '0',},
-    //     {value: 2000000, label: '1',},
-    //     {value: 4000000, label: '2',},
-    //   ];
 
+    // 計算10%的步進值
+    const stepValue = Math.floor((4163386 - 10) / 10);
+
+    // 生成每10%一個 mark 的陣列
+    const marks = Array.from({ length: 11 }, (_, index) => ({
+        value: 10 + index * stepValue,
+        // label: `${10 + index * 10}%`,
+      }));
+      
     //// Search ////
     const [CityNum, setCityNum] = React.useState(22);
     const [ShowDate1, setShowDate1] = React.useState(formatDate(new Date('2022-09-01')));
     const [ShowDate2, setShowDate2] = React.useState(formatDate(new Date('2023-09-01')));
-
     const [searchData, setSearchData] = React.useState({
         selectedDate1: ShowDate1,
         selectedDate2: ShowDate2,
@@ -208,6 +211,12 @@ const Header = ({ onSearchClick }) =>  {
                                         maxDate={new Date('2023-09-01')}
                                         value={Date1value}
                                         onChange={(newValue) => {
+                                            // Check if newValue is within the allowed range
+                                            if (newValue < new Date('2008-09-01')) {
+                                                newValue = new Date('2008-09-01');
+                                            } else if (newValue > new Date('2023-09-01')) {
+                                                newValue = new Date('2023-09-01');
+                                            }
                                             setDate1value(newValue);
                                         }}
                                         TextFieldComponent={(props) => <TextField {...props} helperText={null} />}
@@ -221,6 +230,12 @@ const Header = ({ onSearchClick }) =>  {
                                         maxDate={new Date('2023-09-01')}
                                         value={Date2value}
                                         onChange={(newValue) => {
+                                            // Check if newValue is within the allowed range
+                                            if (newValue < new Date('2008-09-01')) {
+                                                newValue = new Date('2008-09-01');
+                                            } else if (newValue > new Date('2023-09-01')) {
+                                                newValue = new Date('2023-09-01');
+                                            }
                                             setDate2value(newValue);
                                         }}
                                         TextFieldComponent={(props) => <TextField {...props} helperText={null} />}
@@ -238,10 +253,10 @@ const Header = ({ onSearchClick }) =>  {
                                 value={SliderValue}
                                 onChange={handleChange}
                                 valueLabelDisplay="auto"
-                                min={0}
+                                min={10}
                                 max={4163386} 
                                 step={1000}
-                                // marks={marks}
+                                marks={marks}
                             />
                         </div>
                     </div>

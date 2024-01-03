@@ -1,29 +1,34 @@
 import './ChartPage.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Popper } from "@mui/base/Popper";
 import { LineChart } from '@mui/x-charts';
-// import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
-import { Snackbar } from '@mui/material';
+import { Snackbar  } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
+import Papa from 'papaparse';
+const CustomPopperRoot = (props) => (
+    <Popper
+      {...props}
+      anchorEl={{
+        getBoundingClientRect: () => ({
+          ...props.anchorEl?.getBoundingClientRect(),
+          y: 250,
+          top: 250,
+        }),
+      }}
+    //   style={{ zIndex: 1500 }}
+    />
+  );
 
-// const CustomTooltip = ({ active, payload }) => {
-//     if (active && payload && payload.length) {
-//         console.log("good tooltip")
-//         // Customize your Tooltip content here
-//         return (
-//         <div className="custom-tooltip">
-//             <p>{`Value: ${payload[0].value}`}</p>
-//             <p>{`HELLLLLLLO`}</p>
-//         </div>
-//         );
-//     }
+const ChartPage = (props) => {
+    const { selectedDate1, selectedDate2, selectedIndexes } = props.data;
 
-//         return null;
-//     };
+    const [targetData, setTargetData] = useState([]);
+    // target_array = [0, 2, 100, 55]
 
-const ChartPage = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [csvData, setCsvData] = useState([]);
 
     const handleClick = () => {
       setOpen(true);
@@ -37,6 +42,32 @@ const ChartPage = () => {
       setOpen(false);
     };
   
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('/data/data_with_addresses.csv');
+                const text = await response.text();
+                const result = Papa.parse(text, { header: true });
+                setCsvData(result.data);
+            } catch (error) {
+                console.error('Error fetching CSV:', error);
+            }
+        };
+    
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        // Update target data when props.data changes
+        setTargetData(selectedIndexes.map(index => csvData[index]));
+    }, [csvData, props, selectedIndexes]);
+
+    console.log('CSV Data From chart:', csvData.slice(0, 100));
+    console.log('target data:', targetData);
+    // console.log("csvData[0]", csvData[0])
+    // console.log(csvData[2])
+
+
     const createDateArray = (startDate, endDate) => {
         const dateArray = [];
         let currentDate = new Date(startDate);
@@ -79,7 +110,9 @@ const ChartPage = () => {
                 width={500}
                 height={300}
                 position="top"
-                
+                slots={{
+                    popper: CustomPopperRoot,
+                  }}
             >
             </LineChart>
         </div>
@@ -105,6 +138,7 @@ const ChartPage = () => {
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
+                style={{ zIndex: 0 }} 
             />
         </div>
     )
