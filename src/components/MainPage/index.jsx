@@ -21,10 +21,6 @@ const MainPage = () => {
             <Header  onSearchClick={handleSearchClick} />
             <BubbleMap data={SelectedData} />
             <ChartPage />
-            {/* <div>Padding</div> */}
-            {/* <div>
-                HELLO 嗨嗨
-            </div> */}
         </div>
     )
 }

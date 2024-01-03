@@ -54,7 +54,7 @@ const BubbleMap = (props) => {
         // FIXME: use real location
         location: getRandomCoordinate(),
         // FIXME: count the avg
-        people: normalizePeople(parseInt(data['小計'], 10)), // Assuming '小計' is the field for people and needs to be converted to an integer
+        people: parseInt(data['小計'], 10), // Assuming '小計' is the field for people and needs to be converted to an integer
       }));
 
     // const bubbleChartData = [
@@ -75,7 +75,7 @@ const BubbleMap = (props) => {
 
         bubbleChartData.forEach((bubble) => {
             L.circleMarker(bubble.location, {
-                radius: bubble.people, // Adjust the scaling factor as needed
+                radius: normalizePeople(bubble.people), // Adjust the scaling factor as needed
                 color: 'blue',
                 fillOpacity: 0.5
             }).addTo(map).bindPopup(`<strong>${bubble.title}</strong><br />People: ${bubble.people}`);

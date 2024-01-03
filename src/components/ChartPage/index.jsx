@@ -1,10 +1,26 @@
 import './ChartPage.css';
 import React from 'react';
-import { LineChart } from '@mui/x-charts';
-import { Snackbar } from '@mui/material';
+import { LineChart, ChartsTooltip } from '@mui/x-charts';
+// import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
+import { Snackbar, Tooltip } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
+
+const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+        console.log("good tooltip")
+        // Customize your Tooltip content here
+        return (
+        <div className="custom-tooltip">
+            <p>{`Value: ${payload[0].value}`}</p>
+            <p>{`HELLLLLLLO`}</p>
+        </div>
+        );
+    }
+
+        return null;
+    };
 
 const ChartPage = () => {
     const [open, setOpen] = React.useState(false);
@@ -36,36 +52,39 @@ const ChartPage = () => {
         return dateArray;
     };
 
-      const date1 = '2022/08';
-      const date2 = '2023/01';
+    const date1 = '2022/08';
+    const date2 = '2023/01';
 
-      const xAxisData = createDateArray(date1, date2);
-      console.log(xAxisData);
-
-      const action = (
+    const xAxisData = createDateArray(date1, date2);
+    console.log(xAxisData);
+    
+    const action = (
         <div className='chart-windows' >
-          <IconButton
-            size="small"
-            aria-label="close"
-            onClick={handleClose}
-            className='chart-close-btn'
-          >
-            <CloseIcon fontSize="small" />
-          </IconButton>
-          <LineChart
-            xAxis={[{ scaleType: 'point', data: xAxisData }]}
-            series={[
-              { curve: "linear", data: [0, 5, 2, 6, 3, 9.3], label: '11', id: '11' },
-              { curve: "linear", data: [6, 3, 7, 9.5, 4, 2], label: '22', id: '22' },
-              { curve: "linear", data: [3, 6, 3, 13.5, 8, 3], label: '33', id: '33' },
-            ]}
-            width={500}
-            height={300}
-            className='line-chart'
-            position="top"
-          />
+            <IconButton
+                size="small"
+                aria-label="close"
+                onClick={handleClose}
+                className='chart-close-btn'
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+            
+            <LineChart
+                xAxis={[{ scaleType: 'point', data: xAxisData }]}
+                series={[
+                { curve: "linear", data: [0, 5, 2, 6, 3, 9.3], label: '11', id: '11' },
+                { curve: "linear", data: [6, 3, 7, 9.5, 4, 2], label: '22', id: '22' },
+                { curve: "linear", data: [3, 6, 3, 13.5, 8, 3], label: '33', id: '33' },
+                ]}
+                width={500}
+                height={300}
+                position="top"
+                
+            >
+            </LineChart>
         </div>
-      );
+    );
+
     return (
         <div id="chart-page">
             {!open && <IconButton
