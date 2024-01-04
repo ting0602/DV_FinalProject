@@ -20,8 +20,8 @@ const BubbleMap = (props) => {
     const normalizePeople = (value) => {
         // HINT: MinValue radius can't be 0!!!
         // console.log("initialMapSettings Zoom", initialMapSettings.zoom)
-        return Math.sqrt(value) / 60000 * (initialMapSettings.zoom **3);
-        // return (Math.log(value + 100)/20) * initialMapSettings.zoom ;
+        return Math.min(Math.max(Math.sqrt(value) / 65000 * (initialMapSettings.zoom **3), 5), 40);
+        // return (Math.log(value**3)/20) * initialMapSettings.zoom ;
       };
 
     
@@ -157,6 +157,14 @@ const BubbleMap = (props) => {
         zoom: 7,
     });
 
+    useEffect(() => {
+        setCompareData((prevCompareData) => ({
+            ...prevCompareData,
+            selectedDate1: selectedDate1,
+            selectedDate2: selectedDate2,
+            // 不更新 selectedIndexes，保留原有值
+        }));
+    }, [selectedDate1, selectedDate2])
 
     useEffect(() => {
         var map = L.map('bubble-map').setView(initialMapSettings.center, initialMapSettings.zoom);
