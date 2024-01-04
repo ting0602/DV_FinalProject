@@ -118,6 +118,9 @@ const ChartPage = (props) => {
     const xAxisData = createDateArray(date1, date2);
     console.log(xAxisData);
     
+    const xAxisDate = createDateArray(selectedDate1, selectedDate2);
+    console.log("target date for x", xAxisDate);
+    
     const action = (
         <div className='chart-windows' >
             <IconButton
@@ -130,14 +133,15 @@ const ChartPage = (props) => {
             </IconButton>
             
             <LineChart
-                xAxis={[{ scaleType: 'point', data: xAxisData }]}
-                series={[
-                { curve: "linear", data: [0, 5, 2, 6, 3, 9.3], label: '11', id: '11' },
-                { curve: "linear", data: [6, 3, 7, 9.5, 4, 2], label: '22', id: '22' },
-                { curve: "linear", data: [3, 6, 3, 13.5, 8, 3], label: '33', id: '33' },
-                ]}
-                width={500}
-                height={300}
+                xAxis={[{ scaleType: 'point', data: xAxisDate }]}
+                series={targetData.map((item, index) => ({
+                    curve: 'linear',
+                    data: xAxisDate.map(date => item[date] || 0), // Use 0 if the date is not available
+                    label: item['遊憩據點'], // Assuming '類型' is the label you want to use
+                    id: item['遊憩據點'], // You can adjust the ID as needed
+                }))}
+                width={700}
+                height={400}
                 position="top"
                 slots={{
                     popper: CustomPopperRoot,

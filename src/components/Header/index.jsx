@@ -103,6 +103,14 @@ const Header = ({ onSearchClick }) =>  {
         }));
     };
   
+    React.useEffect(() => {
+        // Retrieve checked labels
+        const selectedLabels = Object.entries(checkedLabels)
+          .filter(([label, isChecked]) => isChecked)
+          .map(([label]) => label);
+    
+        setLabelNum(selectedLabels.length);
+      }, [checkedLabels]);
     //// Date ////
     const [SliderValue, setSliderValue] = React.useState([100000, 1000000]);
     const [Date1value, setDate1value] = React.useState(new Date('2022-09-01'));
@@ -229,6 +237,7 @@ const Header = ({ onSearchClick }) =>  {
                         <span>日期範圍：{formatDate(Date1value)} ~ {formatDate(Date2value)}</span>
                         <span>月均人數：{SliderValue[0]} ~ {SliderValue[1]}</span>
                         <span>選定縣市數：{CityNum}</span>
+                        <span>選定類別數：{LabelNum}</span>
                     </div>
                 </AccordionSummary>
                 <AccordionDetails className='header-details'>
