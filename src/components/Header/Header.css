@@ -106,6 +106,7 @@
 
             .MuiFormControlLabel-label {
                 font-family: 'Noto Sans TC';
+                /* color: rgb(255, 245, 133); */
             }
         }
     }

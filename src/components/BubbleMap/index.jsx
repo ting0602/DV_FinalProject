@@ -7,19 +7,150 @@ import ChartPage from '../ChartPage';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 // import { renderToString } from 'react-dom/server';
 import { IconButton } from '@mui/material';
-// import { useDateField } from '@mui/x-date-pickers/DateField/useDateField';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
+// import { useDateField } from '@mui/x-date-pickers/DateField/useDateField';
+var selectedTarget = {
+    '國家公園': [],
+    '博物館': [],
+    '國家級風景特定區': [],
+    '直轄市及縣(市)級風景特定區': [],
+    '森林遊樂區': [],
+    '宗教場所': [],
+    '休閒農業區及休閒農場': [],
+    '觀光地區': [],
+    '其他': [],
+}
+const color_map = {
+    '國家公園': 'rgb(255, 120, 0)',
+    '博物館': 'rgb(255, 250, 150)',
+    '國家級風景特定區': 'rgb(150, 240, 255)',
+    '直轄市及縣(市)級風景特定區': 'rgb(100, 200, 100)',
+    '森林遊樂區': 'rgb(170, 255, 150)',
+    '宗教場所': 'rgb(255, 150, 150)',
+    '休閒農業區及休閒農場': 'rgb(220, 148, 255)',
+    '觀光地區': 'rgb(165,130,90)',
+    '其他': 'rgb(120, 175, 200)',
+}
+const multi_color_map = {
+    '國家公園': [
+        'rgb(255, 120, 0)',
+        'rgb(255, 100, 10)',
+        'rgb(255, 80, 20)',
+        'rgb(255, 75, 30)',
+        'rgb(255, 50, 40)',
+        'rgb(255, 40, 50)',
+        'rgb(255, 30, 60)',
+        'rgb(255, 20, 70)',
+        'rgb(255, 10, 80)',
+        'rgb(255, 0, 90)',
+    ],
+    '博物館': [
+        'rgb(255, 245, 133)',
+        'rgb(255, 240, 117)',
+        'rgb(255, 235, 100)',
+        'rgb(255, 230, 84)',
+        'rgb(255, 225, 68)',
+        'rgb(255, 220, 51)',
+        'rgb(255, 215, 35)',
+        'rgb(255, 210, 19)',
+        'rgb(255, 205, 3)',
+        'rgb(255, 200, 0)',
+    ],
+    '國家級風景特定區' : [
+        'rgb(150, 225, 255)',
+        'rgb(150, 210, 255)',
+        'rgb(150, 195, 255)',
+        'rgb(150, 180, 255)',
+        'rgb(150, 165, 255)',
+        'rgb(150, 150, 255)',
+        'rgb(150, 135, 255)',
+        'rgb(150, 120, 255)',
+        'rgb(150, 105, 255)',
+        'rgb(150, 90, 255)'
+    ],
+    '直轄市及縣(市)級風景特定區' : [
+        'rgb(100, 185, 100)',
+        'rgb(100, 170, 100)',
+        'rgb(100, 155, 100)',
+        'rgb(100, 140, 100)',
+        'rgb(100, 125, 100)',
+        'rgb(100, 110, 100)',
+        'rgb(100, 95, 100)',
+        'rgb(100, 80, 100)',
+        'rgb(100, 65, 100)',
+        'rgb(100, 50, 100)'
+    ],
+    '森林遊樂區' : [
+        'rgb(170, 240, 150)',
+        'rgb(170, 225, 150)',
+        'rgb(170, 210, 150)',
+        'rgb(170, 195, 150)',
+        'rgb(170, 180, 150)',
+        'rgb(170, 165, 150)',
+        'rgb(170, 150, 150)',
+        'rgb(170, 135, 150)',
+        'rgb(170, 120, 150)',
+        'rgb(170, 105, 150)',
+    ],
+    '宗教場所' : [
+        'rgb(255, 133, 133)',
+        'rgb(255, 117, 117)',
+        'rgb(255, 100, 100)',
+        'rgb(255, 84, 84)',
+        'rgb(255, 68, 68)',
+        'rgb(255, 51, 51)',
+        'rgb(255, 35, 35)',
+        'rgb(255, 19, 19)',
+        'rgb(255, 3, 3)',
+        'rgb(255, 0, 0)',
+    ],
+    '休閒農業區及休閒農場' : [
+        'rgb(220, 133, 255)',
+        'rgb(220, 118, 255)',
+        'rgb(220, 103, 255)',
+        'rgb(220, 88, 255)',
+        'rgb(220, 73, 255)',
+        'rgb(220, 58, 255)',
+        'rgb(220, 43, 255)',
+        'rgb(220, 28, 255)',
+        'rgb(220, 13, 255)',
+        'rgb(220, 0, 255)',
+    ],
+    '觀光地區' : [
+        'rgb(165, 130, 75)',
+        'rgb(165, 130, 60)',
+        'rgb(165, 130, 45)',
+        'rgb(165, 130, 30)',
+        'rgb(165, 130, 15)',
+        'rgb(165, 130, 0)',
+        'rgb(165, 130, 0)',
+        'rgb(165, 130, 0)',
+        'rgb(165, 130, 0)',
+        'rgb(165, 130, 0)',
+    ],
+    '其他': [
+        'rgb(120, 160, 200)',
+        'rgb(120, 140, 200)',
+        'rgb(120, 120, 200)',
+        'rgb(120, 100, 200)',
+        'rgb(120, 80, 200)',
+        'rgb(120, 60, 200)',
+        'rgb(120, 40, 200)',
+        'rgb(120, 25, 200)',
+        'rgb(120, 10, 200)',
+        'rgb(120, 0, 200)'
+    ],
+}
+var colorList = []
+var colorMap
 const BubbleMap = (props) => {
     const { selectedDate1, selectedDate2, selectedCities, sliderValue, selectedLabels } = props.data;
-    console.log("input: ", selectedDate1, selectedDate2, selectedCities, sliderValue, selectedLabels);
 
     const [csvData, setCsvData] = useState([]);
-    
+    // const [colorListIndex, setColorListIndex] = useState(0);
 
-    // TODO: Optimize this function
     const normalizePeople = (value) => {
-        // HINT: MinValue radius can't be 0!!!
-        // console.log("initialMapSettings Zoom", initialMapSettings.zoom)
         return Math.min(Math.max(Math.sqrt(value) / 67000 * (initialMapSettings.zoom **3), 3), 40);
         // return (Math.log(value**3)/20) * initialMapSettings.zoom ;
       };
@@ -42,17 +173,6 @@ const BubbleMap = (props) => {
         console.log('fetch data.')
     }, []);
 
-    const color_map = {
-        '國家公園': '#ff9694',
-        '博物館': '#ffe494',
-        '其他': '#78afcc',
-        '國家級風景特定區': '#94e6ff',
-        '直轄市及縣(市)級風景特定區': '#b1cc97',
-        '森林遊樂區': '#a4ff94',
-        '宗教場所': '#ffc194',
-        '休閒農業區及休閒農場': '#d194ff',
-        '觀光地區': '#ff94cf'
-    }
     const bubbleChartData = csvData.map((data, index) => {
         
         // Calculate the average and total
@@ -92,13 +212,38 @@ const BubbleMap = (props) => {
         selectedDate1: selectedDate1,
         selectedDate2: selectedDate1,
         selectedIndexes: [],
+        selectedColor: [],
     });
 
+    const removeData = (category, id) => {
+        var id_list = CompareData.selectedIndexes
+        id_list = id_list.filter(item => item !== id);
+        selectedTarget = {
+            ...selectedTarget,
+            [category]: selectedTarget[category].filter(([i, _]) => i !== id),
+        };
 
-    
+        colorList = []
+        Object.entries(selectedTarget).forEach(([currentCategory, categoryData]) => {
+            // 遍歷選擇的索引
+            id_list.forEach(id => {
+                const colorIndex = categoryData.findIndex(([i, _]) => i === id);
+                if (colorIndex !== -1) {
+                    colorList.push([id, multi_color_map[currentCategory][colorIndex]]);
+                }
+            });
+        });
+        setCompareData((prevCompareData) => ({
+            ...prevCompareData,
+            selectedIndexes: id_list,
+            selectedColor: colorList,
+        }));
+        colorMap = new Map(colorList);
+
+    }
 
     // Popup block
-    const costumPopup = (title, avg, id) => {
+    const costumPopup = (title, avg, id, category) => {
         let line_chart_id = CompareData.selectedIndexes;
         const div = document.createElement("div");
         div.style.fontFamily = "'Noto Sans TC', sans-serif";
@@ -137,18 +282,37 @@ const BubbleMap = (props) => {
                 // If already present, remove it
                 line_chart_id = line_chart_id.filter(item => item !== id);
             } else if (line_chart_id.length === 10) {
-                alert('無法新增: 最多只能比較五項景點');
+                alert('無法新增: 最多只能比較10項景點');
             } else {
                 // If not present, add it
                 line_chart_id.push(id);
+                selectedTarget[category].push([id,title]);
+
+                console.log("selectedTarget", selectedTarget)
             }
-    
+
+            line_chart_id = [...line_chart_id].sort((a, b) => a - b);
+            colorList = [];
+            
+            // 遍歷所有類別
+            Object.entries(selectedTarget).forEach(([currentCategory, categoryData]) => {
+              // 遍歷選擇的索引
+                line_chart_id.forEach(id => {
+                    const colorIndex = categoryData.findIndex(([i, _]) => i === id);
+                    if (colorIndex !== -1) {
+                        colorList.push([id, multi_color_map[currentCategory][colorIndex]]);
+                    }
+                });
+            });
+
             setCompareData({
                 selectedDate1: selectedDate1,
                 selectedDate2: selectedDate2,
                 selectedIndexes: line_chart_id,
+                selectedColor: colorList,
             });
-    
+            colorMap = new Map(colorList);
+            console.log("colorMapcolorMap", colorMap)
             console.log('id:', line_chart_id);
         };
     
@@ -187,23 +351,10 @@ const BubbleMap = (props) => {
             const newCenter = map.getCenter();
             const newZoom = map.getZoom();
 
-            // Debounce the execution to avoid issues with rapid zooming
-            // if (isMounted.current) {
-                // setTimeout(() => {
             setInitialMapSettings({
                 center: [newCenter.lat, newCenter.lng],
                 zoom: newZoom,
             });
-                // }, 200); // Adjust the debounce duration as needed
-                // console.log("new zoom value", initialMapSettings.zoom)
-                // console.log("new zoom value:", newCenter.lat, newCenter.lng)
-                // console.log("new zoom value:",map)
-
-                // setInitialMapSettings({
-                //     center: [initialMapSettings.center, initialMapSettings.zoom],
-                //     zoom: newZoom,
-                // });
-            // }
         });
 
         let filtered_data = bubbleChartData;
@@ -233,7 +384,7 @@ const BubbleMap = (props) => {
 
             const marker = L.circleMarker(bubble.location, markerOptions).addTo(map);
 
-            marker.bindPopup(costumPopup(bubble.title, bubble.avg, bubble.id));
+            marker.bindPopup(costumPopup(bubble.title, bubble.avg, bubble.id, bubble.category));
         });
         map.setMinZoom(7);
         return () => {
@@ -243,7 +394,7 @@ const BubbleMap = (props) => {
             }
         };
     // }, [bubbleChartData, selectedCities, sliderValue]);
-}, [bubbleChartData, selectedCities, sliderValue, initialMapSettings, CompareData, selectedLabels]);
+    }, [bubbleChartData, selectedCities, sliderValue, initialMapSettings, CompareData, selectedLabels]);
 
     const setInitView = () => {
         console.log("home!!", initMapValue.center[0], initMapValue.center[1])
@@ -259,6 +410,37 @@ const BubbleMap = (props) => {
         <IconButton aria-label="home" size="large" className='home-btn' onClick={setInitView} >
             <HomeOutlinedIcon color="action" />
         </IconButton>
+        <div className='bubble-map-legend'>
+        {Object.entries(color_map).map(([category, color], index) => (
+            <div key={index} className='legend-item'>
+                <div style={{ height: '1rem', width: '1rem', backgroundColor: color }}></div>
+                <span>&nbsp;{category}</span>
+            </div>
+        ))}
+        </div>
+        <div className='bubble-map-selector'>
+            {Object.entries(selectedTarget).map(([category, data]) => (
+                Object.entries(data).map(([_, content], index) => {
+                    return(
+                        <div className='selector-container'>
+                        <IconButton
+                            size="small"
+                            aria-label="remove"
+                            onClick={() => removeData(category, content[0])}
+                            className='selector-remove-btn'
+                            style={{ width:'.8rem', height:'.8rem' }}
+                        >
+                            <HighlightOffIcon fontSize="small" sx={{ backgroundColor: multi_color_map[category][index], borderRadius: 100}} />
+                            {/* <HighlightOffIcon fontSize="small" sx={{ backgroundColor: colorMap[content[0]], borderRadius: 100}} /> */}
+                        </IconButton> 
+                        <div className='selector-remove-text'>
+                            {content[1]}
+                        </div>
+                    </div>
+                    )
+                })
+            ))}
+        </div>
         {CompareData.selectedIndexes.length && <ChartPage data={CompareData} />}
     </div>
     );

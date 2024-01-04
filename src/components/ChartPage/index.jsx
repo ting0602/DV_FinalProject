@@ -24,9 +24,10 @@ const CustomPopperRoot = (props) => (
   );
 
 const ChartPage = (props) => {
-    const { selectedDate1, selectedDate2, selectedIndexes } = props.data;
+    const { selectedDate1, selectedDate2, selectedIndexes, selectedColor } = props.data;
 
     const [targetData, setTargetData] = useState([]);
+    const [colorMap, setColorMap] = useState([])
     // target_array = [0, 2, 100, 55]
 
     const [open, setOpen] = useState(false);
@@ -53,7 +54,7 @@ const ChartPage = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/data/data_with_addresses.csv');
+                const response = await fetch('/data/data_with_id.csv');
                 const text = await response.text();
                 const result = Papa.parse(text, { header: true });
                 setCsvData(result.data);
@@ -64,11 +65,10 @@ const ChartPage = (props) => {
     
         fetchData();
     }, []);
-
     useEffect(() => {
         // Update target data when props.data changes
         const selectedData = (selectedIndexes.map(index => csvData[index]));
-    // Check if selectedData is not an empty array
+
         if (selectedData.length > 0 && selectedData[0]) {
             console.log("selectedData not none", selectedData)
             const updatedTargetData = selectedData.map(item => {
@@ -78,6 +78,7 @@ const ChartPage = (props) => {
                     "縣市": item["縣市"],
                     "類型": item["類型"],
                     "遊憩據點": item["遊憩據點"],
+                    "id": item["id"],
                 };
                 const startDate = new Date(selectedDate1);
                 const endDate = new Date(selectedDate2);
@@ -91,8 +92,20 @@ const ChartPage = (props) => {
 
                 return filteredItem;
             });
+            
+            // const colorMap = new Map(selectedColor);
+            const sortedSelectedColor = [...selectedColor].sort((a, b) => a[0] - b[0]);
+            setColorMap(sortedSelectedColor.map(item => item[1]));
 
-            setTargetData(updatedTargetData);
+            // 根據 updatedTargetData 的每個項目，從 colorMap 中取得對應的顏色
+            // const colorList = updatedTargetData.map(item => colorMap.get(item.id));
+            const sortedTargetData = [...updatedTargetData].sort((a, b) => a.id - b.id);
+
+            // colorList 將是一個包含對應顏色的陣列，順序與 updatedTargetData 一致
+            // console.log(colorList);
+            console.log("TODO:colorList", colorMap, sortedTargetData)
+
+            setTargetData(sortedTargetData);
         } else {
             console.log("selectedData is empty");
             // Handle the case when selectedData is empty
@@ -157,8 +170,9 @@ const ChartPage = (props) => {
                     label: item['遊憩據點'], // Assuming '類型' is the label you want to use
                     id: item['遊憩據點'], // You can adjust the ID as needed
                 }))}
-                width={isFullscreen ? 1500 : 700}
-                height={isFullscreen ? 550 : 450}
+                colors={colorMap}
+                width={isFullscreen ? 1450 : 700}
+                height={isFullscreen ? 520 : 450}
                 margin={{ top: 120, right: 50, bottom: 50, left: 100 }}
                 position="top"
                 slots={{
