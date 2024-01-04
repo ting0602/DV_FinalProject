@@ -20,7 +20,7 @@ const BubbleMap = (props) => {
     const normalizePeople = (value) => {
         // HINT: MinValue radius can't be 0!!!
         // console.log("initialMapSettings Zoom", initialMapSettings.zoom)
-        return Math.min(Math.max(Math.sqrt(value) / 65000 * (initialMapSettings.zoom **3), 5), 40);
+        return Math.min(Math.max(Math.sqrt(value) / 67000 * (initialMapSettings.zoom **3), 3), 40);
         // return (Math.log(value**3)/20) * initialMapSettings.zoom ;
       };
 
@@ -136,7 +136,7 @@ const BubbleMap = (props) => {
             if (line_chart_id.includes(id)) {
                 // If already present, remove it
                 line_chart_id = line_chart_id.filter(item => item !== id);
-            } else if (line_chart_id.length === 5) {
+            } else if (line_chart_id.length === 10) {
                 alert('無法新增: 最多只能比較五項景點');
             } else {
                 // If not present, add it

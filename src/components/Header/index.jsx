@@ -112,7 +112,7 @@ const Header = ({ onSearchClick }) =>  {
         setLabelNum(selectedLabels.length);
       }, [checkedLabels]);
     //// Date ////
-    const [SliderValue, setSliderValue] = React.useState([100000, 1000000]);
+    const [SliderValue, setSliderValue] = React.useState([1000, 100000]);
     const [Date1value, setDate1value] = React.useState(new Date('2022-09-01'));
     const [Date2value, setDate2value] = React.useState(new Date('2023-09-01'));
 
@@ -146,7 +146,7 @@ const Header = ({ onSearchClick }) =>  {
         selectedDate1: ShowDate1,
         selectedDate2: ShowDate2,
         selectedCities: cityArray,
-        sliderValue: [100000, 1000000],
+        sliderValue: [1000, 100000],
     });
     const [isCityError, setIsCityError] = React.useState(false);
     const [isLabelError, setIsLabelError] = React.useState(false);

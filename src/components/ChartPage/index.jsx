@@ -158,8 +158,8 @@ const ChartPage = (props) => {
                     id: item['遊憩據點'], // You can adjust the ID as needed
                 }))}
                 width={isFullscreen ? 1500 : 700}
-                height={isFullscreen ? 550 : 400}
-                margin={{ top: 75, right: 50, bottom: 50, left: 100 }}
+                height={isFullscreen ? 550 : 450}
+                margin={{ top: 120, right: 50, bottom: 50, left: 100 }}
                 position="top"
                 slots={{
                     popper: CustomPopperRoot,
