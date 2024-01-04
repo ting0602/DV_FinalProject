@@ -142,6 +142,7 @@ const ChartPage = (props) => {
                 }))}
                 width={700}
                 height={400}
+                margin={{ top: 50, right: 50, bottom: 50, left: 100 }}
                 position="top"
                 slots={{
                     popper: CustomPopperRoot,

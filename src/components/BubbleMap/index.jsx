@@ -4,8 +4,9 @@ import L from 'leaflet';
 import Papa from 'papaparse';
 import './BubbleMap.css';
 import ChartPage from '../ChartPage';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 // import { renderToString } from 'react-dom/server';
-// import {IconButton} from '@mui/material';
+import { IconButton } from '@mui/material';
 // import { useDateField } from '@mui/x-date-pickers/DateField/useDateField';
 
 const BubbleMap = (props) => {
@@ -18,9 +19,8 @@ const BubbleMap = (props) => {
     // TODO: Optimize this function
     const normalizePeople = (value) => {
         // HINT: MinValue radius can't be 0!!!
-        // return value / 10000;
-        console.log("initialMapSettings Zoom", initialMapSettings.zoom)
-        return Math.sqrt(value) / 50000 * (initialMapSettings.zoom **3);
+        // console.log("initialMapSettings Zoom", initialMapSettings.zoom)
+        return Math.sqrt(value) / 60000 * (initialMapSettings.zoom **3);
         // return (Math.log(value + 100)/20) * initialMapSettings.zoom ;
       };
 
@@ -151,7 +151,7 @@ const BubbleMap = (props) => {
     // const mapRef = React.useRef();
     // const isMounted = React.useRef(true);
 
-    // const initMapValue = { center: [23.69781, 120.96052], zoom: 7 };
+    const initMapValue = { center: [23.69781, 120.96052], zoom: 7 };
     const [initialMapSettings, setInitialMapSettings] = useState({
         center: [23.69781, 120.96052],
         zoom: 7,
@@ -229,11 +229,20 @@ const BubbleMap = (props) => {
     // }, [bubbleChartData, selectedCities, sliderValue]);
 }, [bubbleChartData, selectedCities, sliderValue, initialMapSettings, CompareData, selectedLabels]);
 
-    
+    const setInitView = () => {
+        console.log("home!!", initMapValue.center[0], initMapValue.center[1])
+        setInitialMapSettings({
+            center: [initMapValue.center[0], initMapValue.center[1]],
+            zoom: initMapValue.zoom,
+        });
+    }
 
     return (
     <div id="bubble-map-div">
         <div id="bubble-map"></div>
+        <IconButton aria-label="home" size="large" className='home-btn' onClick={setInitView} >
+            <HomeOutlinedIcon color="action" />
+        </IconButton>
         {CompareData.selectedIndexes.length && <ChartPage data={CompareData} />}
     </div>
     );
