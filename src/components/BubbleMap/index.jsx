@@ -72,7 +72,7 @@ const BubbleMap = (props) => {
         }
         const people = calc_total();
         return ({
-        id: index + 1,
+        id: index,
         title: data['遊憩據點'],
         county: data['縣市'],
         category: data['類型'],
@@ -93,43 +93,33 @@ const BubbleMap = (props) => {
         // selectedIndexes: Array,
         selectedDate1: "2018/01",
         selectedDate2: "2020/06",
-        selectedIndexes: [0, 22, 33, 99],
+        selectedIndexes: [0],
     });
 
-    const CustomPopUp = ({title, avg, data}) => {
-        const add_line = () => {
-            console.log('yo')
-            if(CompareData.selectedDate1 == selectedDate1 && CompareData.selectedDate2 == selectedDate2) {
-
-            }else { // date is updated
-                console.log('date is updated');
-                setCompareData({
-                    selectedDate1: selectedDate1,
-                    selectedDate2: selectedDate2,
-                    selectedIndexes: data,
-                })
+    // Popup block
+    const costumPopup = (title, avg, id) => {
+        let line_chart_id = CompareData.selectedIndexes;
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${title}</strong><br />avg people: ${avg}`;
+        const button = document.createElement("button");
+        button.innerHTML = "+";
+        button.onclick = function() {
+            if(line_chart_id.includes(id)) {
+                alert('無法新增: 此為已新增景點');
+            } else if(line_chart_id.length == 5) {
+                alert('無法新增: 最多只能比較五項景點');
+            } else {
+                line_chart_id.push(id);
             }
-        }
-        return (
-            <div>
-                <strong>{title}</strong>
-                <button onClick={() => {
-                    console.log('yo')
-                    if(CompareData.selectedDate1 == selectedDate1 && CompareData.selectedDate2 == selectedDate2) {
-        
-                    }else { // date is updated
-                        console.log('date is updated');
-                        setCompareData({
-                            selectedDate1: selectedDate1,
-                            selectedDate2: selectedDate2,
-                            selectedIndexes: data,
-                        })
-                    }
-                }}>+</button>
-                    <br />
-                avg people: {avg}
-            </div>
-        )
+            setCompareData({
+                selectedDate1: selectedDate1,
+                selectedDate2: selectedDate2,
+                selectedIndexes: line_chart_id,
+            })
+            console.log('id:', line_chart_id);
+          }
+        div.appendChild(button);
+        return (div);
     }
 
     useEffect(() => {
@@ -154,7 +144,7 @@ const BubbleMap = (props) => {
                 color: bubble.color,
                 fillOpacity: 0.5,
                 weight: 1 // stroke width
-            }).addTo(map).bindPopup(renderToString(<CustomPopUp title={bubble.title} avg={bubble.avg} data={bubble.people_list}/>));
+            }).addTo(map).bindPopup(costumPopup(bubble.title, bubble.avg, bubble.id));
         });
         map.setMinZoom(7);
         return () => {
