@@ -6,6 +6,8 @@ import { Snackbar  } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import Papa from 'papaparse';
 const CustomPopperRoot = (props) => (
     <Popper
@@ -40,6 +42,12 @@ const ChartPage = (props) => {
       }
   
       setOpen(false);
+    };
+
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    const handleScreen = () => {
+      setIsFullscreen((prev) => !prev);
     };
   
     useEffect(() => {
@@ -123,15 +131,24 @@ const ChartPage = (props) => {
     
     const action = (
         <div className='chart-windows' >
-            <IconButton
-                size="small"
-                aria-label="close"
-                onClick={handleClose}
-                className='chart-close-btn'
-            >
-                <CloseIcon fontSize="small" />
-            </IconButton>
-            
+            <div className='chart-btn-group'>
+                <IconButton
+                    size="small"
+                    aria-label="close"
+                    onClick={handleClose}
+                    className='chart-close-btn'
+                >
+                    <CloseIcon fontSize="medium" />
+                </IconButton>
+                <IconButton
+                    size="medium"
+                    aria-label="screen"
+                    onClick={handleScreen}
+                    className='chart-screen-btn'
+                >
+                    {isFullscreen ? <FullscreenExitIcon fontSize="medium" /> : <FullscreenIcon fontSize="small" />}
+                </IconButton>
+            </div>
             <LineChart
                 xAxis={[{ scaleType: 'point', data: xAxisDate }]}
                 series={targetData.map((item, index) => ({
@@ -140,12 +157,19 @@ const ChartPage = (props) => {
                     label: item['遊憩據點'], // Assuming '類型' is the label you want to use
                     id: item['遊憩據點'], // You can adjust the ID as needed
                 }))}
-                width={700}
-                height={400}
+                width={isFullscreen ? 1500 : 700}
+                height={isFullscreen ? 550 : 400}
+                margin={{ top: 75, right: 50, bottom: 50, left: 100 }}
                 position="top"
                 slots={{
                     popper: CustomPopperRoot,
-                  }}
+                }}
+                sx={{
+                    '.MuiMarkElement-root': {
+                      scale: '0.6',  // 這裡是調整點的大小的地方
+                      strokeWidth: 2,
+                    },
+                }}
             >
             </LineChart>
         </div>

@@ -6,3 +6,13 @@
     left: 0;
     z-index: 0;
 }
+
+.home-btn {
+    position: absolute;
+    top: 75px;
+    bottom: 0;
+    right: 0;
+    left: 4px;
+    z-index: 0;
+    border-radius: 0;
+}
