@@ -57,3 +57,16 @@
         }
     }
 }
+
+.img_cnt {
+    display: flex;
+    justify-content: center;
+    /* position: relative; */
+    margin-top: 5px;
+}
+.map_img_cnt {
+    position: absolute;
+    right: 25px;
+    bottom: 10px;
+}
+

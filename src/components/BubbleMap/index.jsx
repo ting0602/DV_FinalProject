@@ -242,26 +242,51 @@ const BubbleMap = (props) => {
 
     }
 
+
     // Popup block
     const costumPopup = (title, avg, id, category) => {
         let line_chart_id = CompareData.selectedIndexes;
         const div = document.createElement("div");
         div.style.fontFamily = "'Noto Sans TC', sans-serif";
-        div.innerHTML = `<strong>${title}</strong><br />avg people: ${avg}`;
-    
+        div.innerHTML = `<strong>${title}</strong><br />月均人數: ${avg}`;
         const img_cnt = document.createElement("div");
+        img_cnt.className = 'img_cnt';
+        img_cnt.style.height = 'auto';
         let img = document.createElement("img");
         img.src = `/images/${id}.jpg`;
-        img.width = 200;
+        img.style.maxWidth = '200px';
+        img.style.maxHeight = '110px';
+        img.onerror = function() {
+            this.onerror=null;
+            this.src='';
+        }
         img_cnt.appendChild(img);
+
+        const url = (`https://www.google.com/maps/search/?` +
+            new URLSearchParams({
+                api: 1,
+                map_action: 'map',
+                query: title,
+            }).toString()
+        ) 
+        let map_img_cnt = document.createElement("a");
+        map_img_cnt.href = url;
+        map_img_cnt.className = 'map_img_cnt';
+        let map_img = document.createElement("img");
+        map_img.src = `/images/map.png`;
+        map_img.width = 20;
+        map_img_cnt.appendChild(map_img);
+        img_cnt.appendChild(map_img_cnt);
+
         div.appendChild(img_cnt);
+
 
         const iconButton = document.createElement("div");
         const icon = document.createElement("span");
         iconButton.style.cursor = "pointer";
     
         // You can customize the style of the IconButton as needed
-        iconButton.style.marginTop = "10px";
+        // iconButton.style.marginTop = "10px";
     
         // Check if the id is in line_chart_id
         if (line_chart_id.includes(id)) {
@@ -283,6 +308,7 @@ const BubbleMap = (props) => {
                 line_chart_id = line_chart_id.filter(item => item !== id);
             } else if (line_chart_id.length === 10) {
                 alert('無法新增: 最多只能比較10項景點');
+
             } else {
                 // If not present, add it
                 line_chart_id.push(id);
