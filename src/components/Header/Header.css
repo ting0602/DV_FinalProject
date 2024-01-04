@@ -65,7 +65,7 @@
 
         .header-area {
             margin-left: 3rem;
-            width: 65%;
+            width: 50%;
             display: flex;
             flex-direction: column;
             text-align: left;
@@ -93,6 +93,19 @@
             .MuiFormControlLabel-label {
                 font-family: 'Noto Sans TC';
                 /* 其他樣式屬性 */
+            }
+        }
+        .header-type {
+            /* margin-left: 3rem; */
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600; 
+
+            .MuiFormControlLabel-label {
+                font-family: 'Noto Sans TC';
             }
         }
     }

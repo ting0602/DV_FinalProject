@@ -3,6 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Papa from 'papaparse';
 import './BubbleMap.css';
+import ChartPage from '../ChartPage';
+
 
 Object.filter = function(mainObject, filterFunction) {
     return Object.keys(mainObject).filter(function(ObjectKey) {
@@ -15,24 +17,11 @@ Object.filter = function(mainObject, filterFunction) {
 }
 
 const BubbleMap = (props) => {
-    const { selectedDate1, selectedDate2, selectedCities, sliderValue } = props.data;
+    const { selectedDate1, selectedDate2, selectedCities, sliderValue, selectedLabels } = props.data;
     console.log("input: ", selectedDate1, selectedDate2, selectedCities, sliderValue);
 
     const [csvData, setCsvData] = useState([]);
 
-    // FIXME: del this function
-    // const getRandomCoordinate = () => {
-    //     // Generate random coordinates within Taiwan bounds
-    //     const minLatitude = 20.5;
-    //     const maxLatitude = 25.5;
-    //     const minLongitude = 119.18;
-    //     const maxLongitude = 124.5;
-      
-    //     const latitude = Math.random() * (maxLatitude - minLatitude) + minLatitude;
-    //     const longitude = Math.random() * (maxLongitude - minLongitude) + minLongitude;
-      
-    //     return [latitude, longitude];
-    // };
     // TODO: Optimize this function
     const normalizePeople = (value) => {
         // HINT: MinValue radius can't be 0!!!
@@ -71,7 +60,7 @@ const BubbleMap = (props) => {
     const bubbleChartData = csvData.slice(0, 100).map((data, index) => {
         // Calculate the average, 181month
         const zero = Object.filter(data, function(value) {
-            return value == '0';
+            return value === '0';
         });
         const nonzero_size = 181 - Object.keys(zero).length;
         const avg = Math.round(+data['小計'] / nonzero_size);
@@ -85,17 +74,8 @@ const BubbleMap = (props) => {
         location: [data['緯度'], data['經度']],
         // FIXME: count the avg
         avg: avg,
-        people: parseInt(data['小計'], 10), // Assuming '小計' is the field for people and needs to be converted to an integer
+        people: parseInt(data['小計'], 10),
       })});
-
-    // const bubbleChartData = [
-    //     { id: 1, title: '台北101', county: '臺北市', town: '信義區', village: '西村里', location: [25.034000, 121.564670], people: 100 },
-    //     { id: 2, title: '台灣最南點', county: '屏東縣', town: '恆春鎮', village: '鵝鑾里', location: [21.897750, 120.857921], people: 50 },
-    //     { id: 3, title: '貓鼻頭燈塔', county: '新北市', town: '瑞芳區', village: '鼻頭里', location: [25.129217, 121.923449], people: 75 }
-    // ];
-
-    // Sort the bubble chart data based on the number of people in descending order
-    // const sortedBubbleChartData = bubbleChartData.sort((a, b) => b.people - a.people);
 
     useEffect(() => {
         const map = L.map('bubble-map').setView([23.69781, 120.96052], 7);
@@ -124,9 +104,23 @@ const BubbleMap = (props) => {
             // Clean up when the component unmounts
             map.remove();
         };
-    }, [bubbleChartData]);
+    }, [bubbleChartData, selectedCities, sliderValue]);
 
-    return <div id="bubble-map" />;
+    const [CompareData, setCompareData] = useState({
+        // selectedDate1: String,
+        // selectedDate2: String,
+        // selectedIndexes: Array,
+        selectedDate1: "2018/01",
+        selectedDate2: "2020/06",
+        selectedIndexes: [0, 22, 33, 99],
+    });
+
+    return (
+    <div id="bubble-map-div">
+        <div id="bubble-map"></div>
+        <ChartPage data={CompareData} />
+    </div>
+    );
 };
 
 export default BubbleMap;

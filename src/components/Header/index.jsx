@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Box, FormControlLabel, Checkbox, Slider, TextField , IconButton } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Box, FormControlLabel, Checkbox, Slider, TextField , IconButton, FormGroup } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import './Header.css';
@@ -85,7 +85,23 @@ const Header = ({ onSearchClick }) =>  {
         }));
 
     };
-    
+
+    const [checkedLabels, setCheckedLabels] = React.useState({
+        國家公園: true,
+        博物館: true,
+        國家級風景特定區: true,
+        直轄市及縣市級風景特定區: true,
+        休閒農業區及休閒農場: true,
+        觀光地區: true,
+        其他: true,
+    });   
+
+    const handleCheckboxChange = (label) => {
+        setCheckedLabels((prev) => ({
+            ...prev,
+            [label]: !prev[label],
+        }));
+    };
   
     //// Date ////
     const [SliderValue, setSliderValue] = React.useState([100000, 1000000]);
@@ -115,6 +131,7 @@ const Header = ({ onSearchClick }) =>  {
       
     //// Search ////
     const [CityNum, setCityNum] = React.useState(22);
+    const [LabelNum, setLabelNum] = React.useState(7);
     const [ShowDate1, setShowDate1] = React.useState(formatDate(new Date('2022-09-01')));
     const [ShowDate2, setShowDate2] = React.useState(formatDate(new Date('2023-09-01')));
     const [searchData, setSearchData] = React.useState({
@@ -124,6 +141,7 @@ const Header = ({ onSearchClick }) =>  {
         sliderValue: [100000, 1000000],
     });
     const [isCityError, setIsCityError] = React.useState(false);
+    const [isLabelError, setIsLabelError] = React.useState(false);
 
     // 初始時執行一次
     React.useEffect(() => {
@@ -141,12 +159,31 @@ const Header = ({ onSearchClick }) =>  {
 
         console.log('選定的縣市:', selectedCities);
 
-        if (selectedCities.length > 0) {
+        const selectedLabels = Object.entries(checkedLabels)
+            .filter(([label, isChecked]) => isChecked)
+            .map(([label]) => label);
+
+        setLabelNum(selectedLabels.length)
+  
+        console.log('Checked Labels:', selectedLabels);
+
+        if (selectedLabels.length <= 0) {
+            setIsLabelError(true)
+        } else {
+            setIsLabelError(false)
+        }
+        if (selectedCities.length <= 0) {
+            setIsCityError(true);
+        } else {
+            setIsCityError(false);
+        }
+
+        if (selectedCities.length > 0 && selectedLabels.length > 0) {
             var date1
             var date2
             var selectedCity = selectedCities
             var sliderValue = SliderValue
-            setCityNum(selectedCities.length)
+            // setCityNum(selectedCities.length)
 
             // 獲取選定的日期
             if (Date1value > Date2value) {
@@ -172,12 +209,9 @@ const Header = ({ onSearchClick }) =>  {
                 selectedDate2: date2,
                 selectedCities: selectedCity,
                 sliderValue: sliderValue,
+                selectedLabels: selectedLabels
             });
-            
-            setIsCityError(false);
 
-        } else {
-            setIsCityError(true);
         }
 
     };
@@ -307,6 +341,25 @@ const Header = ({ onSearchClick }) =>  {
                                 </div>
                             ))}
                         </Box>
+                    </div>
+                    <div className='header-type'>
+                        {isLabelError && <span style={{ color: 'red' }}>類型：請選擇至少一種類型</span>}
+                        {!isLabelError && <span>類型：</span>}
+                        <br />
+                        <FormGroup>
+                        {Object.entries(checkedLabels).map(([label, isChecked]) => (
+                            <FormControlLabel
+                            key={label}
+                            control={
+                                <Checkbox
+                                checked={isChecked}
+                                onChange={() => handleCheckboxChange(label)}
+                                />
+                            }
+                            label={label}
+                            />
+                        ))}
+                        </FormGroup>
                     </div>
                     <div>
                         <IconButton aria-label="search" size="large" onClick={handleSearchClick}>

@@ -59,13 +59,42 @@ const ChartPage = (props) => {
 
     useEffect(() => {
         // Update target data when props.data changes
-        setTargetData(selectedIndexes.map(index => csvData[index]));
-    }, [csvData, props, selectedIndexes]);
+        const selectedData = (selectedIndexes.map(index => csvData[index]));
+    // Check if selectedData is not an empty array
+        if (selectedData.length > 0 && selectedData[0]) {
+            console.log("selectedData not none", selectedData)
+            const updatedTargetData = selectedData.map(item => {
+                // 保留需要的列
+                console.log("item", item)
+                const filteredItem = {
+                    "縣市": item["縣市"],
+                    "類型": item["類型"],
+                    "遊憩據點": item["遊憩據點"],
+                };
+                const startDate = new Date(selectedDate1);
+                const endDate = new Date(selectedDate2);
+                // 提取所选日期范围的数据
+                for (const key in item) {
+                    const currentDate = new Date(key);
+                    if (currentDate >= startDate && currentDate <= endDate) {
+                        filteredItem[key] = item[key];
+                    }
+                }
 
-    console.log('CSV Data From chart:', csvData.slice(0, 100));
+                return filteredItem;
+            });
+
+            setTargetData(updatedTargetData);
+        } else {
+            console.log("selectedData is empty");
+            // Handle the case when selectedData is empty
+        }
+            // setTargetData(updatedTargetData);
+    }, [csvData, props, selectedDate1, selectedDate2, selectedIndexes]);
+
+    // console.log('CSV Data From chart:', csvData.slice(0, 100));
     console.log('target data:', targetData);
-    // console.log("csvData[0]", csvData[0])
-    // console.log(csvData[2])
+    console.log('select data:', selectedDate1, selectedDate2);
 
 
     const createDateArray = (startDate, endDate) => {
