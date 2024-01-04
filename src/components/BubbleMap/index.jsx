@@ -39,6 +39,7 @@ const BubbleMap = (props) => {
         };
     
         fetchData();
+        console.log('fetch data.')
     }, []);
 
     const color_map = {
@@ -59,16 +60,16 @@ const BubbleMap = (props) => {
             let year = +selectedDate1.split('/')[0], month = +selectedDate1.split('/')[1];
             const end_year = +selectedDate2.split('/')[0], end_month = +selectedDate2.split('/')[1];
             let total = 0, count = 0;
-            let people_list = [];
+            // let people_list = [];
             while(true) {
                 const now = +data[`${year}/${String(month).padStart(2, '0')}`];
-                if(now !== 0) {total += now; count += 1; people_list.push(now)}
+                if(now !== 0) {total += now; count += 1;}
                 if(year === end_year && month === end_month) break;
                 month += 1;
                 if(month > 12) { year += 1; month = 1;}
             }
             // console.log('total:', total);
-            return [total, Math.round(total / count), people_list];
+            return [total, Math.round(total / count)];
         }
         const people = calc_total();
         return ({
@@ -83,7 +84,7 @@ const BubbleMap = (props) => {
         // FIXME: count the avg
         avg: people[1],
         people: people[0],
-        people_list: people[2],
+        // people_list: people[2],
         // people: parseInt(data['小計'], 10),
       })});
 
@@ -103,6 +104,13 @@ const BubbleMap = (props) => {
         div.style.fontFamily = "'Noto Sans TC', sans-serif";
         div.innerHTML = `<strong>${title}</strong><br />avg people: ${avg}`;
     
+        const img_cnt = document.createElement("div");
+        let img = document.createElement("img");
+        img.src = `/images/${id}.jpg`;
+        img.width = 200;
+        img_cnt.appendChild(img);
+        div.appendChild(img_cnt);
+
         const iconButton = document.createElement("div");
         const icon = document.createElement("span");
         iconButton.style.cursor = "pointer";
