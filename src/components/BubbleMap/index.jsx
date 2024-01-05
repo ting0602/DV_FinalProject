@@ -271,6 +271,7 @@ const BubbleMap = (props) => {
         ) 
         let map_img_cnt = document.createElement("a");
         map_img_cnt.href = url;
+        map_img_cnt.target = '_blank';
         map_img_cnt.className = 'map_img_cnt';
         let map_img = document.createElement("img");
         map_img.src = `/images/map.png`;

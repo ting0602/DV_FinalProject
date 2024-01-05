@@ -57,7 +57,9 @@
         }
     }
 }
-
+.leaflet-popup {
+    width: 247px;
+}
 .img_cnt {
     display: flex;
     justify-content: center;
