@@ -5,11 +5,9 @@ import Papa from 'papaparse';
 import './BubbleMap.css';
 import ChartPage from '../ChartPage';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-// import { renderToString } from 'react-dom/server';
 import { IconButton } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-// import { useDateField } from '@mui/x-date-pickers/DateField/useDateField';
 var selectedTarget = {
     '國家公園': [],
     '博物館': [],
@@ -35,15 +33,15 @@ const color_map = {
 const multi_color_map = {
     '國家公園': [
         'rgb(255, 120, 0)',
-        'rgb(255, 100, 10)',
-        'rgb(255, 80, 20)',
-        'rgb(255, 75, 30)',
-        'rgb(255, 50, 40)',
-        'rgb(255, 40, 50)',
-        'rgb(255, 30, 60)',
-        'rgb(255, 20, 70)',
+        'rgb(255, 100, 80)',
+        'rgb(255, 80, 160)',
+        'rgb(255, 75, 200)',
+        'rgb(255, 50, 240)',
+        'rgb(255, 40, 200)',
+        'rgb(255, 30, 160)',
+        'rgb(255, 20, 120)',
         'rgb(255, 10, 80)',
-        'rgb(255, 0, 90)',
+        'rgb(255, 0, 40)',
     ],
     '博物館': [
         'rgb(255, 245, 133)',
@@ -59,15 +57,15 @@ const multi_color_map = {
     ],
     '國家級風景特定區' : [
         'rgb(150, 225, 255)',
-        'rgb(150, 210, 255)',
-        'rgb(150, 195, 255)',
+        'rgb(150, 205, 230)',
         'rgb(150, 180, 255)',
-        'rgb(150, 165, 255)',
-        'rgb(150, 150, 255)',
-        'rgb(150, 135, 255)',
-        'rgb(150, 120, 255)',
-        'rgb(150, 105, 255)',
-        'rgb(150, 90, 255)'
+        'rgb(150, 160, 230)',
+        'rgb(150, 140, 255)',
+        'rgb(150, 120, 230)',
+        'rgb(150, 100, 255)',
+        'rgb(150, 80, 230)',
+        'rgb(150, 60, 255)',
+        'rgb(150, 40, 230)'
     ],
     '直轄市及縣(市)級風景特定區' : [
         'rgb(100, 185, 100)',
@@ -107,15 +105,15 @@ const multi_color_map = {
     ],
     '休閒農業區及休閒農場' : [
         'rgb(220, 133, 255)',
-        'rgb(220, 118, 255)',
-        'rgb(220, 103, 255)',
-        'rgb(220, 88, 255)',
+        'rgb(200, 118, 255)',
+        'rgb(220, 103, 235)',
+        'rgb(200, 88, 200)',
         'rgb(220, 73, 255)',
-        'rgb(220, 58, 255)',
-        'rgb(220, 43, 255)',
-        'rgb(220, 28, 255)',
-        'rgb(220, 13, 255)',
-        'rgb(220, 0, 255)',
+        'rgb(200, 58, 200)',
+        'rgb(220, 43, 200)',
+        'rgb(200, 28, 255)',
+        'rgb(220, 13, 220)',
+        'rgb(200, 0, 255)',
     ],
     '觀光地區' : [
         'rgb(165, 130, 75)',
@@ -131,15 +129,15 @@ const multi_color_map = {
     ],
     '其他': [
         'rgb(120, 160, 200)',
-        'rgb(120, 140, 200)',
-        'rgb(120, 120, 200)',
-        'rgb(120, 100, 200)',
+        'rgb(100, 140, 220)',
+        'rgb(120, 120, 240)',
+        'rgb(100, 100, 220)',
         'rgb(120, 80, 200)',
-        'rgb(120, 60, 200)',
-        'rgb(120, 40, 200)',
-        'rgb(120, 25, 200)',
+        'rgb(100, 60, 220)',
+        'rgb(120, 40, 240)',
+        'rgb(100, 25, 220)',
         'rgb(120, 10, 200)',
-        'rgb(120, 0, 200)'
+        'rgb(100, 5, 220)'
     ],
 }
 var colorList = []
@@ -188,7 +186,6 @@ const BubbleMap = (props) => {
                 month += 1;
                 if(month > 12) { year += 1; month = 1;}
             }
-            // console.log('total:', total);
             return [total, Math.round(total / count)];
         }
         const people = calc_total();
@@ -198,14 +195,10 @@ const BubbleMap = (props) => {
         county: data['縣市'],
         category: data['類型'],
         color: color_map[data['類型']],
-        // FIXME: use real location
-        // location: getRandomCoordinate(),
+
         location: [data['緯度'], data['經度']],
-        // FIXME: count the avg
         avg: people[1],
         people: people[0],
-        // people_list: people[2],
-        // people: parseInt(data['小計'], 10),
       })});
 
     const [CompareData, setCompareData] = useState({
@@ -281,13 +274,9 @@ const BubbleMap = (props) => {
 
         div.appendChild(img_cnt);
 
-
         const iconButton = document.createElement("div");
         const icon = document.createElement("span");
         iconButton.style.cursor = "pointer";
-    
-        // You can customize the style of the IconButton as needed
-        // iconButton.style.marginTop = "10px";
     
         // Check if the id is in line_chart_id
         if (line_chart_id.includes(id)) {
@@ -347,9 +336,6 @@ const BubbleMap = (props) => {
         return div;
     };
     
-    // const mapRef = React.useRef();
-    // const isMounted = React.useRef(true);
-
     const initMapValue = { center: [23.69781, 120.96052], zoom: 7 };
     const [initialMapSettings, setInitialMapSettings] = useState({
         center: [23.69781, 120.96052],
@@ -361,13 +347,11 @@ const BubbleMap = (props) => {
             ...prevCompareData,
             selectedDate1: selectedDate1,
             selectedDate2: selectedDate2,
-            // 不更新 selectedIndexes，保留原有值
         }));
     }, [selectedDate1, selectedDate2])
 
     useEffect(() => {
         var map = L.map('bubble-map').setView(initialMapSettings.center, initialMapSettings.zoom);
-        // mapRef.current = map;
         
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://carto.com/">CartoDB</a> contributors'
@@ -421,10 +405,10 @@ const BubbleMap = (props) => {
             }
         };
     // }, [bubbleChartData, selectedCities, sliderValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bubbleChartData, selectedCities, sliderValue, initialMapSettings, CompareData, selectedLabels]);
 
     const setInitView = () => {
-        console.log("home!!", initMapValue.center[0], initMapValue.center[1])
         setInitialMapSettings({
             center: [initMapValue.center[0], initMapValue.center[1]],
             zoom: initMapValue.zoom,

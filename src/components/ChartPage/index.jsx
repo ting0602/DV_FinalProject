@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 import Papa from 'papaparse';
 const CustomPopperRoot = (props) => (
     <Popper
@@ -28,7 +29,6 @@ const ChartPage = (props) => {
 
     const [targetData, setTargetData] = useState([]);
     const [colorMap, setColorMap] = useState([])
-    // target_array = [0, 2, 100, 55]
 
     const [open, setOpen] = useState(false);
     const [csvData, setCsvData] = useState([]);
@@ -46,11 +46,15 @@ const ChartPage = (props) => {
     };
 
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [realColor, setIsRealColor] = useState(true);
 
     const handleScreen = () => {
-      setIsFullscreen((prev) => !prev);
+        setIsFullscreen((prev) => !prev);
     };
   
+    const handleColorList = () => {
+        setIsRealColor((prev) => !prev);
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -72,7 +76,7 @@ const ChartPage = (props) => {
         if (selectedData.length > 0 && selectedData[0]) {
             console.log("selectedData not none", selectedData)
             const updatedTargetData = selectedData.map(item => {
-                // 保留需要的列
+
                 console.log("item", item)
                 const filteredItem = {
                     "縣市": item["縣市"],
@@ -82,7 +86,7 @@ const ChartPage = (props) => {
                 };
                 const startDate = new Date(selectedDate1);
                 const endDate = new Date(selectedDate2);
-                // 提取所选日期范围的数据
+
                 for (const key in item) {
                     const currentDate = new Date(key);
                     if (currentDate >= startDate && currentDate <= endDate) {
@@ -111,6 +115,7 @@ const ChartPage = (props) => {
             // Handle the case when selectedData is empty
         }
             // setTargetData(updatedTargetData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [csvData, props, selectedDate1, selectedDate2, selectedIndexes]);
 
     // console.log('CSV Data From chart:', csvData.slice(0, 100));
@@ -159,18 +164,26 @@ const ChartPage = (props) => {
                     onClick={handleScreen}
                     className='chart-screen-btn'
                 >
-                    {isFullscreen ? <FullscreenExitIcon fontSize="medium" /> : <FullscreenIcon fontSize="small" />}
+                    {isFullscreen ? <FullscreenExitIcon fontSize="medium" /> : <FullscreenIcon fontSize="medium" />}
+                </IconButton>
+                <IconButton
+                    size="medium"
+                    aria-label="screen"
+                    onClick={handleColorList}
+                    className='chart-screen-btn'
+                >
+                    <ColorLensIcon fontSize="small" />
                 </IconButton>
             </div>
             <LineChart
                 xAxis={[{ scaleType: 'point', data: xAxisDate }]}
                 series={targetData.map((item, index) => ({
                     curve: 'linear',
-                    data: xAxisDate.map(date => item[date] || 0), // Use 0 if the date is not available
-                    label: item['遊憩據點'], // Assuming '類型' is the label you want to use
-                    id: item['遊憩據點'], // You can adjust the ID as needed
+                    data: xAxisDate.map(date => item[date] || 0), 
+                    label: item['遊憩據點'], 
+                    id: item['遊憩據點'], 
                 }))}
-                colors={colorMap}
+                {...(realColor ? { colors: colorMap } : {})}
                 width={isFullscreen ? 1450 : 700}
                 height={isFullscreen ? 520 : 450}
                 margin={{ top: 120, right: 50, bottom: 50, left: 100 }}
@@ -180,7 +193,7 @@ const ChartPage = (props) => {
                 }}
                 sx={{
                     '.MuiMarkElement-root': {
-                      scale: '0.6',  // 這裡是調整點的大小的地方
+                      scale: '0.6', 
                       strokeWidth: 2,
                     },
                 }}

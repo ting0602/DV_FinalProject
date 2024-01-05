@@ -91,6 +91,8 @@ const Header = ({ onSearchClick }) =>  {
         博物館: true,
         國家級風景特定區: true,
         直轄市及縣市級風景特定區: true,
+        森林遊樂區: true,
+        宗教場所: true,
         休閒農業區及休閒農場: true,
         觀光地區: true,
         其他: true,
