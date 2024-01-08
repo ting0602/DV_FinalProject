@@ -1,8 +1,35 @@
-# Getting Started with Create React App
+# DV_FinalProject
+**2023 NYCU Data Visualization and Visual Analytics Final Project**
+## Introduction
+In this assignment, our emphasis will be on how to quickly and intuitively analyze the popularity trends of Taiwan's tourist attractions over the years. Therefore, we have chosen to utilize a dataset containing statistics on the number of visitors to Taiwan's tourist spots over the years. Additionally, we will incorporate geographical information visualization to enhance the user's ability to analyze the data more effectively.
+
+## Dataset
+* [交通部觀光署觀光統計資料庫 - 觀光遊憩據點人次統計](https://stat.taiwan.net.tw/scenicSpot)
+* Employing web scraping and the Google Maps API to acquire relevant information
+  * Attraction addresses
+  * Latitude and longitude coordinates
+  * Photos
+## Implementation Methods:
+### Main Presentation:
+ * We present the data on a map of Taiwan combined with a bubble chart. The bubble's position represents the actual location of the attraction, its size indicates the average monthly visitor count, and its color corresponds to the type of attraction.
+### Data Filtering:
+ * Users can perform preliminary filtering of the data on the map based on date, visitor count range, county, and attraction type.
+### In-Depth Analysis:
+  * Clicking on a bubble reveals the monthly average visitor count, attraction photos, and provides a link to the attraction's location on Google Maps.
+  * Users can click on bubbles to add attractions to a line chart comparing the historical visitor counts of up to ten attractions. There is a limit on the number of selected attractions to maintain the readability of the line chart.
+  * Selected attractions on the line chart share the same color scheme to facilitate comparison of trends. Users can also switch to random colors for better distinction between attractions.
+
+## Usage: Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
+First, you should run:
+
+```
+git clone https://github.com/ting0602/DV_FinalProject.git
+```
+
 
 In the project directory, you can run:
 
