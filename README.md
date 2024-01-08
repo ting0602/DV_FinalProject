@@ -10,15 +10,17 @@ In this assignment, our emphasis will be on how to quickly and intuitively analy
   * Latitude and longitude coordinates
   * Photos
 ## Implementation Methods:
-### Main Presentation:
+### 1. Main Presentation:
  * We present the data on a map of Taiwan combined with a bubble chart. The bubble's position represents the actual location of the attraction, its size indicates the average monthly visitor count, and its color corresponds to the type of attraction.
-### Data Filtering:
+ ![image](https://github.com/ting0602/DV_FinalProject/blob/master/overview.png)
+### 2. Data Filtering:
  * Users can perform preliminary filtering of the data on the map based on date, visitor count range, county, and attraction type.
-### In-Depth Analysis:
+ ![image](https://github.com/ting0602/DV_FinalProject/blob/master/demo2.png)
+### 3. In-Depth Analysis:
   * Clicking on a bubble reveals the monthly average visitor count, attraction photos, and provides a link to the attraction's location on Google Maps.
   * Users can click on bubbles to add attractions to a line chart comparing the historical visitor counts of up to ten attractions. There is a limit on the number of selected attractions to maintain the readability of the line chart.
   * Selected attractions on the line chart share the same color scheme to facilitate comparison of trends. Users can also switch to random colors for better distinction between attractions.
-
+  ![image](https://github.com/ting0602/DV_FinalProject/blob/master/demo1.png)
 ## Usage: Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
