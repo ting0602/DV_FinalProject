@@ -141,7 +141,7 @@ const multi_color_map = {
     ],
 }
 var colorList = []
-var colorMap
+// var colorMap
 const BubbleMap = (props) => {
     const { selectedDate1, selectedDate2, selectedCities, sliderValue, selectedLabels } = props.data;
 
@@ -229,7 +229,7 @@ const BubbleMap = (props) => {
             selectedIndexes: id_list,
             selectedColor: colorList,
         }));
-        colorMap = new Map(colorList);
+        // colorMap = new Map(colorList);
 
     }
 
@@ -323,7 +323,7 @@ const BubbleMap = (props) => {
                 selectedIndexes: line_chart_id,
                 selectedColor: colorList,
             });
-            colorMap = new Map(colorList);
+            // colorMap = new Map(colorList);
         };
     
         div.appendChild(iconButton);
