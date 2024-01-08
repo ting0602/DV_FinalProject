@@ -74,10 +74,8 @@ const ChartPage = (props) => {
         const selectedData = (selectedIndexes.map(index => csvData[index]));
 
         if (selectedData.length > 0 && selectedData[0]) {
-            console.log("selectedData not none", selectedData)
             const updatedTargetData = selectedData.map(item => {
 
-                console.log("item", item)
                 const filteredItem = {
                     "縣市": item["縣市"],
                     "類型": item["類型"],
@@ -96,32 +94,16 @@ const ChartPage = (props) => {
 
                 return filteredItem;
             });
-            
-            // const colorMap = new Map(selectedColor);
             const sortedSelectedColor = [...selectedColor].sort((a, b) => a[0] - b[0]);
             setColorMap(sortedSelectedColor.map(item => item[1]));
-
-            // 根據 updatedTargetData 的每個項目，從 colorMap 中取得對應的顏色
-            // const colorList = updatedTargetData.map(item => colorMap.get(item.id));
             const sortedTargetData = [...updatedTargetData].sort((a, b) => a.id - b.id);
-
-            // colorList 將是一個包含對應顏色的陣列，順序與 updatedTargetData 一致
-            // console.log(colorList);
-            console.log("TODO:colorList", colorMap, sortedTargetData)
 
             setTargetData(sortedTargetData);
         } else {
             console.log("selectedData is empty");
-            // Handle the case when selectedData is empty
         }
-            // setTargetData(updatedTargetData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [csvData, props, selectedDate1, selectedDate2, selectedIndexes]);
-
-    // console.log('CSV Data From chart:', csvData.slice(0, 100));
-    console.log('target data:', targetData);
-    console.log('select data:', selectedDate1, selectedDate2);
-
 
     const createDateArray = (startDate, endDate) => {
         const dateArray = [];
@@ -137,15 +119,8 @@ const ChartPage = (props) => {
     
         return dateArray;
     };
-
-    const date1 = '2022/08';
-    const date2 = '2023/01';
-
-    const xAxisData = createDateArray(date1, date2);
-    console.log(xAxisData);
     
     const xAxisDate = createDateArray(selectedDate1, selectedDate2);
-    console.log("target date for x", xAxisDate);
     
     const action = (
         <div className='chart-windows' >

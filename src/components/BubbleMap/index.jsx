@@ -160,7 +160,6 @@ const BubbleMap = (props) => {
                 const response = await fetch('/data/data_with_id.csv');
                 const text = await response.text();
                 const result = Papa.parse(text, { header: true });
-                console.log(result.data)
                 setCsvData(result.data);
             } catch (error) {
                 console.error('Error fetching CSV:', error);
@@ -168,7 +167,6 @@ const BubbleMap = (props) => {
         };
     
         fetchData();
-        console.log('fetch data.')
     }, []);
 
     const bubbleChartData = csvData.map((data, index) => {
@@ -303,8 +301,6 @@ const BubbleMap = (props) => {
                 // If not present, add it
                 line_chart_id.push(id);
                 selectedTarget[category].push([id,title]);
-
-                console.log("selectedTarget", selectedTarget)
             }
 
             line_chart_id = [...line_chart_id].sort((a, b) => a - b);
@@ -328,8 +324,6 @@ const BubbleMap = (props) => {
                 selectedColor: colorList,
             });
             colorMap = new Map(colorList);
-            console.log("colorMapcolorMap", colorMap)
-            console.log('id:', line_chart_id);
         };
     
         div.appendChild(iconButton);
@@ -404,7 +398,6 @@ const BubbleMap = (props) => {
                 map.remove();
             }
         };
-    // }, [bubbleChartData, selectedCities, sliderValue]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bubbleChartData, selectedCities, sliderValue, initialMapSettings, CompareData, selectedLabels]);
 
@@ -442,7 +435,6 @@ const BubbleMap = (props) => {
                             style={{ width:'.8rem', height:'.8rem' }}
                         >
                             <HighlightOffIcon fontSize="small" sx={{ backgroundColor: multi_color_map[category][index], borderRadius: 100}} />
-                            {/* <HighlightOffIcon fontSize="small" sx={{ backgroundColor: colorMap[content[0]], borderRadius: 100}} /> */}
                         </IconButton> 
                         <div className='selector-remove-text'>
                             {content[1]}

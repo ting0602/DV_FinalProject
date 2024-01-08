@@ -34,7 +34,6 @@ const Header = ({ onSearchClick }) =>  {
                 .filter(([city, isSelected]) => isSelected && city !== 'allCities' && !cityList.hasOwnProperty(city))
                 .map(([city]) => city);
 
-            console.log("selectedCities", selectedCities)
             setCityNum(selectedCities.length)
         };
 
@@ -167,15 +166,11 @@ const Header = ({ onSearchClick }) =>  {
 
         setCityNum(selectedCities.length)
 
-        console.log('選定的縣市:', selectedCities);
-
         const selectedLabels = Object.entries(checkedLabels)
             .filter(([label, isChecked]) => isChecked)
             .map(([label]) => label);
 
         setLabelNum(selectedLabels.length)
-  
-        console.log('Checked Labels:', selectedLabels);
 
         if (selectedLabels.length <= 0) {
             setIsLabelError(true)
@@ -193,7 +188,6 @@ const Header = ({ onSearchClick }) =>  {
             var date2
             var selectedCity = selectedCities
             var sliderValue = SliderValue
-            // setCityNum(selectedCities.length)
 
             // 獲取選定的日期
             if (Date1value > Date2value) {
@@ -206,14 +200,9 @@ const Header = ({ onSearchClick }) =>  {
                 date1 = formatDate(Date1value)
                 date2 = formatDate(Date2value)
             }
-            console.log('選定的日期範圍:', formatDate(Date1value), '至', formatDate(Date2value));
+
             setShowDate1(formatDate(Date1value))
             setShowDate2(formatDate(Date2value))
-    
-            // 獲取 Slider 範圍值
-            console.log('Slider 範圍值:', SliderValue);
-            // setShowSliderValue(SliderValue)
-
             setSearchData({
                 selectedDate1: date1,
                 selectedDate2: date2,
@@ -306,7 +295,6 @@ const Header = ({ onSearchClick }) =>  {
                         </div>
                     </div>
                     <div className='header-area'>
-                        {/* <span>地區：{isCityError && "請選擇至少一個縣市"}</span> */}
                         {isCityError && <span style={{ color: 'red' }}>地區：請選擇至少一個縣市</span>}
                         {!isCityError && <span>地區：</span>}
                         <FormControlLabel
